@@ -20,7 +20,7 @@ public class EmailServiceImpl implements EmailService {
         String recipientAddress = email;
         String subject = "Xác thực tài khoản";
         String confirmationUrl
-                = AppVariable.APP_CONTEXT_URL + "/verify-account?token=" + token;
+                = AppVariable.APP_CONTEXT_URL + "/verify-account/" + token;
         String message = "Xác thực tài khoản";
 
         SimpleMailMessage mail_data = new SimpleMailMessage();
