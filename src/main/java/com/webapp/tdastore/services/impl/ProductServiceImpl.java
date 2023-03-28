@@ -1,9 +1,11 @@
 package com.webapp.tdastore.services.impl;
 
-import com.webapp.tdastore.entities.Product;
-import com.webapp.tdastore.entities.generator.GeneratorCode;
-import com.webapp.tdastore.repositories.ProductRepos;
+import com.webapp.tdastore.data.entities.Product;
+import com.webapp.tdastore.data.entities.generator.GeneratorCode;
+import com.webapp.tdastore.data.payload.response.ProductResponse;
+import com.webapp.tdastore.data.repositories.ProductRepos;
 import com.webapp.tdastore.services.ProductService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -12,15 +14,28 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Autowired
     ProductRepos productRepos;
 
     @Autowired
     GeneratorCode generatorCode;
+
+    @Override
+    public ProductResponse mappingProductToResponseObject(Product product) {
+        ProductResponse response = modelMapper.map(product, ProductResponse.class);
+        response.setImages_file(product.getImages().stream().map(
+                t -> t.getUrlImage()
+        ).collect(Collectors.toList()));
+        response.setCategoryId(product.getCategory().getCategoryId());
+        return response;
+    }
 
     @Override
     public List<Product> findAll(int page, int number) {
@@ -109,7 +124,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findByCategoryCode(String code,int page) {
+    public List<Product> findByCategoryCode(String code, int page) {
         return productRepos.findProductByCategoryCode(code, PageRequest.of(page, 9));
     }
 }

@@ -1,8 +1,8 @@
 package com.webapp.tdastore.services.impl;
 
-import com.webapp.tdastore.entities.Favourite;
-import com.webapp.tdastore.entities.User;
-import com.webapp.tdastore.repositories.FavouriteRepos;
+import com.webapp.tdastore.data.entities.Favourite;
+import com.webapp.tdastore.data.entities.User;
+import com.webapp.tdastore.data.repositories.FavouriteRepos;
 import com.webapp.tdastore.services.FavouriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

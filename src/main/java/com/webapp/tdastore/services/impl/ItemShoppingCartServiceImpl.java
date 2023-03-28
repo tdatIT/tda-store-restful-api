@@ -1,11 +1,11 @@
 package com.webapp.tdastore.services.impl;
 
-import com.webapp.tdastore.entities.ItemShoppingCart;
-import com.webapp.tdastore.entities.Product;
-import com.webapp.tdastore.entities.User;
-import com.webapp.tdastore.repositories.ItemShoppingCartRepos;
-import com.webapp.tdastore.repositories.ProductRepos;
-import com.webapp.tdastore.repositories.UserRepos;
+import com.webapp.tdastore.data.entities.ItemShoppingCart;
+import com.webapp.tdastore.data.entities.Product;
+import com.webapp.tdastore.data.entities.User;
+import com.webapp.tdastore.data.repositories.ItemShoppingCartRepos;
+import com.webapp.tdastore.data.repositories.ProductRepos;
+import com.webapp.tdastore.data.repositories.UserRepos;
 import com.webapp.tdastore.services.ItemShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

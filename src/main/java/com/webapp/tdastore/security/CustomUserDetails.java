@@ -1,6 +1,6 @@
 package com.webapp.tdastore.security;
 
-import com.webapp.tdastore.entities.User;
+import com.webapp.tdastore.data.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

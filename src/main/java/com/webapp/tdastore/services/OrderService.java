@@ -1,9 +1,9 @@
 package com.webapp.tdastore.services;
 
-import com.webapp.tdastore.dto.OrderDTO;
-import com.webapp.tdastore.entities.Order;
-import com.webapp.tdastore.entities.User;
-import com.webapp.tdastore.entities.UserAddress;
+import com.webapp.tdastore.data.dto.OrderDTO;
+import com.webapp.tdastore.data.entities.Order;
+import com.webapp.tdastore.data.entities.User;
+import com.webapp.tdastore.data.entities.UserAddress;
 
 public interface OrderService {
     void insertOrderForGuest(OrderDTO dto);

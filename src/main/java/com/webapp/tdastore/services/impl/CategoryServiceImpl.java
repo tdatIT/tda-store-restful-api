@@ -1,7 +1,7 @@
 package com.webapp.tdastore.services.impl;
 
-import com.webapp.tdastore.entities.Category;
-import com.webapp.tdastore.repositories.CategoryRepos;
+import com.webapp.tdastore.data.entities.Category;
+import com.webapp.tdastore.data.repositories.CategoryRepos;
 import com.webapp.tdastore.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;

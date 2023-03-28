@@ -12,6 +12,7 @@ public class ValidatorUtils {
             "ưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s\\W|_]" +
             "[^<>_\\\";'*&%^=]+$";
     public static final String PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^_&+=])(?=\\S+$).{8,}$";
+    public static final String PASSWORD_LOGIN_REGEX = "^[^<>%$';]*$";
     public static final String PHONE_REGEX = "^[0-9]{10}$";
 
     public boolean checkEmailRegex(String email) {

@@ -1,6 +1,6 @@
 package com.webapp.tdastore.services;
 
-import com.webapp.tdastore.entities.ItemShoppingCart;
+import com.webapp.tdastore.data.entities.ItemShoppingCart;
 
 import java.util.List;
 

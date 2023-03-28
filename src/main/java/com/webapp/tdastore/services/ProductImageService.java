@@ -1,6 +1,6 @@
 package com.webapp.tdastore.services;
 
-import com.webapp.tdastore.entities.ProductImage;
+import com.webapp.tdastore.data.entities.ProductImage;
 
 import java.util.List;
 

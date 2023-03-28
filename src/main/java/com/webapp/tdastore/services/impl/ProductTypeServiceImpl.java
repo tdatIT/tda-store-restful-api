@@ -1,7 +1,7 @@
 package com.webapp.tdastore.services.impl;
 
-import com.webapp.tdastore.entities.ProductType;
-import com.webapp.tdastore.repositories.ProductTypeRepos;
+import com.webapp.tdastore.data.entities.ProductType;
+import com.webapp.tdastore.data.repositories.ProductTypeRepos;
 import com.webapp.tdastore.services.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

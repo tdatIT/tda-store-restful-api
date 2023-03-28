@@ -1,8 +1,8 @@
 package com.webapp.tdastore.services;
 
 import com.webapp.tdastore.security.CustomUserDetails;
-import com.webapp.tdastore.entities.User;
-import com.webapp.tdastore.repositories.UserRepos;
+import com.webapp.tdastore.data.entities.User;
+import com.webapp.tdastore.data.repositories.UserRepos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

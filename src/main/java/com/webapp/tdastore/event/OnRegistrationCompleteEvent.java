@@ -1,7 +1,6 @@
 package com.webapp.tdastore.event;
 
-import com.webapp.tdastore.entities.User;
-import lombok.Data;
+import com.webapp.tdastore.data.entities.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.ApplicationEvent;

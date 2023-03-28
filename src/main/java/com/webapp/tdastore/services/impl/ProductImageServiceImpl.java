@@ -1,7 +1,7 @@
 package com.webapp.tdastore.services.impl;
 
-import com.webapp.tdastore.entities.ProductImage;
-import com.webapp.tdastore.repositories.ProductImageRepos;
+import com.webapp.tdastore.data.entities.ProductImage;
+import com.webapp.tdastore.data.repositories.ProductImageRepos;
 import com.webapp.tdastore.services.ProductImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

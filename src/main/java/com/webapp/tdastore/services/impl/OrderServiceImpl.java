@@ -1,10 +1,10 @@
 package com.webapp.tdastore.services.impl;
 
-import com.webapp.tdastore.dto.OrderDTO;
-import com.webapp.tdastore.entities.*;
-import com.webapp.tdastore.repositories.OrderRepos;
-import com.webapp.tdastore.repositories.ProductRepos;
-import com.webapp.tdastore.repositories.UserRepos;
+import com.webapp.tdastore.data.dto.OrderDTO;
+import com.webapp.tdastore.data.entities.*;
+import com.webapp.tdastore.data.repositories.OrderRepos;
+import com.webapp.tdastore.data.repositories.ProductRepos;
+import com.webapp.tdastore.data.repositories.UserRepos;
 import com.webapp.tdastore.services.ItemShoppingCartService;
 import com.webapp.tdastore.services.OrderService;
 import com.webapp.tdastore.services.ShippingService;

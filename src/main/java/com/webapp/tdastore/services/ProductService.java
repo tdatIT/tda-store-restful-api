@@ -1,6 +1,7 @@
 package com.webapp.tdastore.services;
 
-import com.webapp.tdastore.entities.Product;
+import com.webapp.tdastore.data.entities.Product;
+import com.webapp.tdastore.data.payload.response.ProductResponse;
 
 import java.util.List;
 
@@ -32,5 +33,7 @@ public interface ProductService {
 
     void disableProduct(Product product);
 
-    List<Product> findByCategoryCode(String code,int page);
+    List<Product> findByCategoryCode(String code, int page);
+
+    ProductResponse mappingProductToResponseObject(Product products);
 }

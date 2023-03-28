@@ -2,7 +2,7 @@ package com.webapp.tdastore.services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.webapp.tdastore.upload.CloudinaryUtils;
+import com.webapp.tdastore.config.CloudinaryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

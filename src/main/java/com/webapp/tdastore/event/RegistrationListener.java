@@ -1,6 +1,6 @@
 package com.webapp.tdastore.event;
 
-import com.webapp.tdastore.entities.User;
+import com.webapp.tdastore.data.entities.User;
 import com.webapp.tdastore.services.EmailService;
 import com.webapp.tdastore.services.UserService;
 import org.slf4j.Logger;

@@ -1,6 +1,6 @@
 package com.webapp.tdastore.services;
 
-import com.webapp.tdastore.entities.Category;
+import com.webapp.tdastore.data.entities.Category;
 
 import java.util.List;
 

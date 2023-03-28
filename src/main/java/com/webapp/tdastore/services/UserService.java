@@ -1,9 +1,9 @@
 package com.webapp.tdastore.services;
 
-import com.webapp.tdastore.dto.UserDTO;
-import com.webapp.tdastore.entities.ResetPassToken;
-import com.webapp.tdastore.entities.User;
-import com.webapp.tdastore.entities.VerificationToken;
+import com.webapp.tdastore.data.dto.UserDTO;
+import com.webapp.tdastore.data.entities.ResetPassToken;
+import com.webapp.tdastore.data.entities.User;
+import com.webapp.tdastore.data.entities.VerificationToken;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

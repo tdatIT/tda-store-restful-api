@@ -1,10 +1,10 @@
 package com.webapp.tdastore.services.impl;
 
-import com.webapp.tdastore.dto.UserDTO;
-import com.webapp.tdastore.entities.*;
-import com.webapp.tdastore.repositories.ResetPassTokenRepos;
-import com.webapp.tdastore.repositories.UserRepos;
-import com.webapp.tdastore.repositories.VerificationTokenRepos;
+import com.webapp.tdastore.data.dto.UserDTO;
+import com.webapp.tdastore.data.entities.*;
+import com.webapp.tdastore.data.repositories.ResetPassTokenRepos;
+import com.webapp.tdastore.data.repositories.UserRepos;
+import com.webapp.tdastore.data.repositories.VerificationTokenRepos;
 import com.webapp.tdastore.services.EmailService;
 import com.webapp.tdastore.services.UserService;
 import org.modelmapper.ModelMapper;

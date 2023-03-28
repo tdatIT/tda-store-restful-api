@@ -1,9 +1,9 @@
 package com.webapp.tdastore.controller.web;
 
-import com.webapp.tdastore.dto.ProductDTO;
-import com.webapp.tdastore.entities.Product;
-import com.webapp.tdastore.exception.ProductNotFoundException;
-import com.webapp.tdastore.payload.response.ProductResponse;
+import com.webapp.tdastore.data.dto.ProductDTO;
+import com.webapp.tdastore.data.entities.Product;
+import com.webapp.tdastore.data.exception.CustomExceptionRuntime;
+import com.webapp.tdastore.data.payload.response.ProductResponse;
 import com.webapp.tdastore.services.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,38 +25,47 @@ public class ProductRestController {
     private ModelMapper modelMapper;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<ProductResponse> getList(@RequestParam int page, @RequestParam int num) {
-        List<Product> products = productService.findNewProduct(page, num);
-        if (products.size() < 1 || num > 12) {
-            throw new ProductNotFoundException("Not found product with page and number of product or number of product to large");
+    public List<ProductResponse> getList(@RequestParam(required = false) Integer page,
+                                         @RequestParam(required = false) Integer size) {
+        if (page == null)
+            page = 0;
+        if (size == null)
+            size = 0;
+        List<Product> products = productService.findNewProduct(page, size);
+
+        if (products.size() < 1 || size > 12) {
+            throw new CustomExceptionRuntime(404, "Not found product with page and number of product or number of product to large");
         } else {
-            List<ProductResponse> responseList = products.stream().map(item -> {
-                ProductResponse response = modelMapper.map(item, ProductResponse.class);
-                response.setImages_file(
-                        item.getImages()
-                                .stream()
-                                .map(t -> t.getUrlImage())
-                                .collect(Collectors.toList()));
-                response.setCategoryId(item.getCategory().getCategoryId());
-                return response;
-            }).collect(Collectors.toList());
+            List<ProductResponse> responseList = products.stream()
+                    .map(item ->
+                            productService.mappingProductToResponseObject(item))
+                    .collect(Collectors.toList());
             return responseList;
         }
+    }
+
+    @RequestMapping(value = "/category/{categoryCode}", method = RequestMethod.GET)
+    public List<ProductResponse> getProductsByCategoryCode(@PathVariable String categoryCode,
+                                                           @RequestParam(required = false) Integer page) {
+        if (page == null)
+            page = 0;
+        List<Product> products = productService.findByCategoryCode(categoryCode, page);
+        if (products.size() < 1)
+            throw new CustomExceptionRuntime(404, "Not found product with category code");
+        List<ProductResponse> responseList = products
+                .stream().map(item ->
+                        productService.mappingProductToResponseObject(item)
+                ).collect(Collectors.toList());
+        return responseList;
     }
 
     @RequestMapping(value = "/{code}", method = RequestMethod.GET)
     public ProductResponse getProductByCode(@PathVariable String code) {
         Product p = productService.findProductByCode(code);
         if (p == null) {
-            throw new ProductNotFoundException("Not found product have this code");
+            throw new CustomExceptionRuntime(404, "Not found product have this code");
         } else {
-            ProductResponse response = modelMapper.map(p, ProductResponse.class);
-            response.setImages_file(
-                    p.getImages()
-                            .stream()
-                            .map(t -> t.getUrlImage())
-                            .collect(Collectors.toList()));
-            response.setCategoryId(p.getCategory().getCategoryId());
+            ProductResponse response = productService.mappingProductToResponseObject(p);
             return response;
         }
     }
@@ -66,7 +75,7 @@ public class ProductRestController {
     public ResponseEntity insertNewProduct(@RequestBody @Valid ProductDTO dto) {
         Product product = modelMapper.map(dto, Product.class);
         String responseCode = productService.insert(product);
-        if (responseCode == null) throw new ProductNotFoundException("Insert fail !");
+        if (responseCode == null) throw new CustomExceptionRuntime(400, "Insert fail !");
         return ResponseEntity.status(HttpStatus.OK).body(responseCode);
     }
 
@@ -74,7 +83,7 @@ public class ProductRestController {
     @RequestMapping(value = "", method = RequestMethod.PUT)
     public ResponseEntity updateProduct(@RequestBody @Valid ProductDTO dto) {
         if (dto.getProductCode() == null) {
-            throw new ProductNotFoundException("Not found product");
+            throw new CustomExceptionRuntime(400, "Not found product");
         }
         Product p = modelMapper.map(dto, Product.class);
         productService.update(p);
@@ -86,7 +95,7 @@ public class ProductRestController {
     public ResponseEntity updateProduct(@PathVariable String code) {
         Product p = productService.findProductByCode(code);
         if (p == null) {
-            throw new ProductNotFoundException("Not found product");
+            throw new CustomExceptionRuntime(400, "Not found product");
         }
         p.setStatus(Product.DISABLE);
         productService.update(p);

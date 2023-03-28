@@ -1,6 +1,6 @@
 package com.webapp.tdastore.services;
 
-import com.webapp.tdastore.entities.ProductType;
+import com.webapp.tdastore.data.entities.ProductType;
 
 public interface ProductTypeService {
 
