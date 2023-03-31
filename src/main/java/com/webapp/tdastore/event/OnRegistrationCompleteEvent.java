@@ -9,13 +9,10 @@ import org.springframework.context.ApplicationEvent;
 @Setter
 public class OnRegistrationCompleteEvent extends ApplicationEvent {
     private User user;
-    private String applicationContextUrl;
 
-
-    public OnRegistrationCompleteEvent(User user, String appContextUrl) {
+    public OnRegistrationCompleteEvent(User user) {
         super(user);
         this.user = user;
-        this.applicationContextUrl = appContextUrl;
     }
 
 }

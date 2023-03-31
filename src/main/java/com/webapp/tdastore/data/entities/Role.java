@@ -11,6 +11,9 @@ import java.util.List;
 @Getter
 @Setter
 public class Role {
+    public final static int ADMIN = 1;
+    public final static int USER = 2;
+    public final static int GUEST = 3;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int roleId;

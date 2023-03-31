@@ -6,6 +6,7 @@ import com.webapp.tdastore.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,10 +18,15 @@ public class CategoryRestController {
     private CategoryService categoryService;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Category> getCategoryList() {
-        List<Category> categories = categoryService.getAll();
+    public List<Category> getCategoryList(@RequestParam(required = false)
+                                          Integer size) {
+        List<Category> categories;
+        if (size == null)
+            categories = categoryService.getAll();
+        else
+            categories = categoryService.getAllPaging(size);
         if (categories.size() < 0) {
-            throw new CustomExceptionRuntime(400,"Get categories was failed");
+            throw new CustomExceptionRuntime(400, "Get categories was failed");
         }
         return categories;
     }

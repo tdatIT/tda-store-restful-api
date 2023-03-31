@@ -7,7 +7,7 @@ import java.util.List;
 public interface CategoryService {
     List<Category> getAll();
 
-    List<Category> getAllPaging(int page);
+    List<Category> getAllPaging(int size);
 
     Category findById(long id);
 

@@ -23,9 +23,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getAllPaging(int page) {
-        //show 5 category and cast to list type
-        return categoryRepos.findAll(PageRequest.of(page, 5)).getContent();
+    public List<Category> getAllPaging(int size) {
+        //show categories with size and cast to list type
+        return categoryRepos.findAll(PageRequest.of(0, size)).getContent();
     }
 
     @Override

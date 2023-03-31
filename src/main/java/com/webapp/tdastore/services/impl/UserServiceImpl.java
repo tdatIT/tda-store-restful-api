@@ -118,6 +118,7 @@ public class UserServiceImpl implements UserService {
             resetToken.setUser(user);
             resetToken.setToken(value + "");
             resetPassTokenRepos.save(resetToken);
+
             emailService.sendResetPassword(user.getEmail(), resetToken.getToken());
         }
     }
