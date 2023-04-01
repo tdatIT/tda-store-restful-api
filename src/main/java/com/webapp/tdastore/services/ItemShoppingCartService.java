@@ -15,7 +15,7 @@ public interface ItemShoppingCartService {
 
     void insert(String productCode, int quantity, long userId);
 
-    void remove(long itemId);
+    void remove(long userId, String productCode);
 
     void updateQuantity(long userId, String productCode, int quantity);
 

@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
-@Table(name = "user")
+@Table(name = "users")
 @Entity
 @Data
 public class User {
@@ -50,7 +50,7 @@ public class User {
     private List<Order> orders;
 
     @OneToMany(mappedBy = "user")
-    private List<Favourite> favourites;
+    private List<Wishlist> wishlists;
 
     @ManyToOne
     @JoinColumn(name = "role_id")

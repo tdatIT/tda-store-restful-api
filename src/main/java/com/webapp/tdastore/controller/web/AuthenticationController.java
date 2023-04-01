@@ -51,8 +51,8 @@ public class AuthenticationController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public LoginResponse login(@Valid @RequestBody LoginRequest loginData) {
         User us = userService.findByEmail(loginData.getEmail());
-        if (us.isStatus() == false) {
-            throw new CustomExceptionRuntime(401, "User hasn't been active");
+        if (us == null|| us.isStatus() == false) {
+            throw new CustomExceptionRuntime(401, "User hasn't been active or not register");
         }
         try {
             Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginData.getEmail(), loginData.getPassword()));

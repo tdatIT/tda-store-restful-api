@@ -77,11 +77,12 @@ public class ItemShoppingCartServiceImpl implements ItemShoppingCartService {
     }
 
     @Override
-    public void remove(long itemId) {
-        ItemShoppingCart item = cartRepos.findById(itemId).orElseThrow();
+    public void remove(long userId, String productCode) {
+        ItemShoppingCart item = cartRepos.findItemShoppingCartByProductCodeAndUserId(productCode, userId);
         if (item != null) {
             cartRepos.delete(item);
         }
+
     }
 
     @Override
