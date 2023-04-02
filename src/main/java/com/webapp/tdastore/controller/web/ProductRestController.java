@@ -5,6 +5,7 @@ import com.webapp.tdastore.data.entities.Product;
 import com.webapp.tdastore.data.exception.CustomExceptionRuntime;
 import com.webapp.tdastore.data.payload.response.ProductResponse;
 import com.webapp.tdastore.services.ProductService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -70,6 +71,7 @@ public class ProductRestController {
         }
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity insertNewProduct(@RequestBody @Valid ProductDTO dto) {
@@ -79,6 +81,7 @@ public class ProductRestController {
         return ResponseEntity.status(HttpStatus.OK).body(responseCode);
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "", method = RequestMethod.PUT)
     public ResponseEntity updateProduct(@RequestBody @Valid ProductDTO dto) {
@@ -90,6 +93,7 @@ public class ProductRestController {
         return ResponseEntity.status(HttpStatus.OK).body("Update product success");
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/{code}", method = RequestMethod.DELETE)
     public ResponseEntity updateProduct(@PathVariable String code) {

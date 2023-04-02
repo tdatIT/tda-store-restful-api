@@ -10,6 +10,8 @@ import com.webapp.tdastore.data.payload.response.UpdateCartResponse;
 import com.webapp.tdastore.security.CustomUserDetails;
 import com.webapp.tdastore.services.ItemShoppingCartService;
 import com.webapp.tdastore.services.ProductService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/v1/cart")
+@SecurityRequirement(name = "Bearer Authentication")
 public class CartRestController {
     @Autowired
     private ProductService productService;

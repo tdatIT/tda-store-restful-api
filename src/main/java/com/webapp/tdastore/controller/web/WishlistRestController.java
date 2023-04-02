@@ -11,6 +11,7 @@ import com.webapp.tdastore.security.CustomUserDetails;
 import com.webapp.tdastore.services.ProductService;
 import com.webapp.tdastore.services.UserService;
 import com.webapp.tdastore.services.WishlistService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/wishlists")
+@SecurityRequirement(name = "Bearer Authentication")
 public class WishlistRestController {
     @Autowired
     private WishlistService wishlistService;
