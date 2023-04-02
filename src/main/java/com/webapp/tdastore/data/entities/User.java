@@ -2,6 +2,7 @@ package com.webapp.tdastore.data.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -10,6 +11,7 @@ import java.util.List;
 @Table(name = "users")
 @Entity
 @Data
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,4 +60,7 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    public User(long userId) {
+        this.userId = userId;
+    }
 }

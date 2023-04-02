@@ -17,6 +17,7 @@ public class OrderItems {
     @JoinColumn(name = "product_id")
     private Product product;
 
+
     @ManyToOne
     @MapsId("orderId")
     @JoinColumn(name = "order_id")

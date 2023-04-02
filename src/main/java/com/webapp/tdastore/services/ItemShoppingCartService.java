@@ -7,6 +7,12 @@ import java.util.List;
 public interface ItemShoppingCartService {
     List<ItemShoppingCart> findAllByUserId(long userId);
 
+    List<ItemShoppingCart> findAllByItemsId(List<Long> itemId);
+
+    double totalAmountSelectItem(List<ItemShoppingCart> items);
+
+    double totalHaveDiscountSelectItem(List<ItemShoppingCart> items);
+
     double totalAmountHasDiscount(long userId);
 
     double totalPriceForItem(long userId);
@@ -18,6 +24,8 @@ public interface ItemShoppingCartService {
     void remove(long userId, String productCode);
 
     void updateQuantity(long userId, String productCode, int quantity);
+
+    void removeItemWhenOrderItemWasCreated(long itemId);
 
     void clear(long userId);
 

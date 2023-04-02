@@ -2,13 +2,19 @@ package com.webapp.tdastore.services;
 
 import com.webapp.tdastore.data.dto.OrderDTO;
 import com.webapp.tdastore.data.entities.Order;
-import com.webapp.tdastore.data.entities.User;
-import com.webapp.tdastore.data.entities.UserAddress;
+import com.webapp.tdastore.data.payload.response.OrderResponse;
+
+import java.util.List;
 
 public interface OrderService {
-    void insertOrderForGuest(OrderDTO dto);
+    List<Order> lastOrderRecentOfUser(long userId, int page, int size);
 
-    void insertOrderForUser(User us, UserAddress address);
+    Order getOrderByOrderId(long orderId);
+
+    long insertOrderForUser(OrderDTO dto);
 
     void updateOrder(Order order);
+
+    OrderResponse mapOrderEntityToResponse(Order order);
+
 }

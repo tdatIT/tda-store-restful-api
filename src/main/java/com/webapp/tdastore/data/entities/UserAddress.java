@@ -2,6 +2,7 @@ package com.webapp.tdastore.data.entities;
 
 import com.webapp.tdastore.data.payload.ProvinceAPI;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class UserAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +42,10 @@ public class UserAddress {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public UserAddress(long addressId) {
+        this.addressId = addressId;
+    }
 
     public String getAPIName() {
         String url_province = "https://provinces.open-api.vn/api/p/" + province;

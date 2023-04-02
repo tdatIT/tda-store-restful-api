@@ -7,12 +7,15 @@ import com.webapp.tdastore.data.repositories.ItemShoppingCartRepos;
 import com.webapp.tdastore.data.repositories.ProductRepos;
 import com.webapp.tdastore.data.repositories.UserRepos;
 import com.webapp.tdastore.services.ItemShoppingCartService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class ItemShoppingCartServiceImpl implements ItemShoppingCartService {
     @Autowired
     private ProductRepos productRepos;
@@ -24,6 +27,36 @@ public class ItemShoppingCartServiceImpl implements ItemShoppingCartService {
     @Override
     public List<ItemShoppingCart> findAllByUserId(long userId) {
         return cartRepos.findAllByUserId(userId);
+    }
+
+    @Override
+    public List<ItemShoppingCart> findAllByItemsId(List<Long> itemId) {
+        return itemId.stream().map(t ->
+                cartRepos.findById(t).orElseThrow()
+        ).collect(Collectors.toList());
+    }
+
+    @Override
+    public double totalAmountSelectItem(List<ItemShoppingCart> items) {
+        try {
+            return items.stream().mapToDouble(
+                    t -> t.getProduct().getPrice() * t.getQuantity()).sum();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return 0;
+    }
+
+    @Override
+    public double totalHaveDiscountSelectItem(List<ItemShoppingCart> items) {
+        try {
+            return items.stream().mapToDouble(
+                    t -> (t.getProduct().getPromotionPrice() > 0 ?
+                            t.getProduct().getPromotionPrice() : t.getProduct().getPromotionPrice()) * t.getQuantity()).sum();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return 0;
     }
 
     @Override
@@ -77,12 +110,17 @@ public class ItemShoppingCartServiceImpl implements ItemShoppingCartService {
     }
 
     @Override
+    public void removeItemWhenOrderItemWasCreated(long itemId) {
+        ItemShoppingCart item = cartRepos.findById(itemId).orElseThrow();
+        cartRepos.delete(item);
+    }
+
+    @Override
     public void remove(long userId, String productCode) {
         ItemShoppingCart item = cartRepos.findItemShoppingCartByProductCodeAndUserId(productCode, userId);
         if (item != null) {
             cartRepos.delete(item);
         }
-
     }
 
     @Override

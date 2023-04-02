@@ -33,4 +33,6 @@ public class Voucher {
     private int quantityAvailable;
     @Column
     private boolean isDeleted;
+
 }
+

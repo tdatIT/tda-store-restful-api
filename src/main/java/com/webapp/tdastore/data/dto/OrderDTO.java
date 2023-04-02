@@ -1,30 +1,34 @@
 package com.webapp.tdastore.data.dto;
 
-import com.webapp.tdastore.config.ValidatorUtils;
-import com.webapp.tdastore.data.entities.UserAddress;
 import lombok.Data;
+import lombok.NonNull;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Positive;
+import java.util.List;
 
 @Data
 public class OrderDTO {
-    @NotBlank
-    @Pattern(regexp = ValidatorUtils.VIETNAMESE_REGEX)
-    private String firstname;
 
-    @NotBlank
-    @Pattern(regexp = ValidatorUtils.VIETNAMESE_REGEX)
-    private String lastname;
-
-    @NotBlank
-    @Pattern(regexp = ValidatorUtils.EMAIL_REGEX)
-    private String email;
-
-    @Pattern(regexp = ValidatorUtils.PHONE_REGEX)
-    private String phone;
-
-    @NotNull
-    private UserAddress defaultAddress;
+    @Positive
+    private long userId;
+    @NonNull
+    @Positive
+    private double shippingCosts;
+    @NonNull
+    @Positive
+    private double discount;
+    @NonNull
+    @Positive
+    private double total;
+    @NonNull
+    @Positive
+    private int paymentMethod;
+    @NonNull
+    @Positive
+    private long address_id;
+    @Positive
+    private String voucher_code;
+    @NotEmpty
+    private List<Long> cart_items;
 }

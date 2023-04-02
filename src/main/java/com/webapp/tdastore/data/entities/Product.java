@@ -2,6 +2,7 @@ package com.webapp.tdastore.data.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -10,6 +11,7 @@ import java.util.List;
 @Table(name = "product")
 @Entity
 @Data
+@NoArgsConstructor
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,4 +67,8 @@ public class Product {
 
     public static final int DISABLE = 1;
     public static final int ENABLE = 0;
+
+    public Product(long productId) {
+        this.productId = productId;
+    }
 }
