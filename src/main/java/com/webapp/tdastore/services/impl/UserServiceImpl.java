@@ -2,7 +2,11 @@ package com.webapp.tdastore.services.impl;
 
 import com.webapp.tdastore.data.dto.UserDTO;
 import com.webapp.tdastore.data.entities.*;
+import com.webapp.tdastore.data.payload.AddressRequest;
+import com.webapp.tdastore.data.payload.ProfileInfo;
+import com.webapp.tdastore.data.payload.response.ChangePassword;
 import com.webapp.tdastore.data.repositories.ResetPassTokenRepos;
+import com.webapp.tdastore.data.repositories.UserAddressRepo;
 import com.webapp.tdastore.data.repositories.UserRepos;
 import com.webapp.tdastore.data.repositories.VerificationTokenRepos;
 import com.webapp.tdastore.services.EmailService;
@@ -27,7 +31,8 @@ import java.util.Random;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepos userRepos;
-
+    @Autowired
+    private UserAddressRepo addressRepo;
     @Autowired
     private VerificationTokenRepos tokenRepos;
 
@@ -73,8 +78,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerNewUserAccount(UserDTO dto) {
-        if (existEmail(dto.getEmail()))
-            return null;
+        if (existEmail(dto.getEmail())) return null;
         User user = mapper.map(dto, User.class);
         //hash password
         String hashPassword = encoder.encode(user.getHashPassword());
@@ -144,11 +148,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void disableAccount(User user) {
-
+        user.setStatus(false);
+        userRepos.save(user);
     }
 
     private boolean existEmail(String email) {
         return userRepos.findUserByEmail(email) != null;
+    }
+
+    @Override
+    public void changePassword(long userId, ChangePassword body) {
+        User us = userRepos.findById(userId).orElseThrow();
+        String hash_oldPass = encoder.encode(body.getOld_pass());
+        if (us != null && us.getHashPassword().equals(hash_oldPass)) {
+            String hash_newPass = encoder.encode(body.getNew_pass());
+            us.setHashPassword(hash_newPass);
+            us.setUpdateDate(new Timestamp(new Date().getTime()));
+            userRepos.save(us);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void changeInfo(long userId, ProfileInfo body) {
+        User us = userRepos.findById(userId).orElseThrow();
+        if (us != null) {
+            us.setLastname(body.getLastName());
+            us.setFirstname(body.getFirstName());
+            us.setPhone(body.getPhone());
+            us.setUpdateDate(new Timestamp(new Date().getTime()));
+            userRepos.save(us);
+        }
     }
 
     @Transactional
@@ -156,5 +186,33 @@ public class UserServiceImpl implements UserService {
     public void updatePassword(User us, String password) {
         us.setHashPassword(encoder.encode(password));
         updateAccount(us);
+    }
+
+    @Override
+    public List<UserAddress> getAddressesByUser(long userId) {
+        return addressRepo.findAllActiveAddressesByUser(userId);
+    }
+
+    @Override
+    public void addNewUserAddress(User us, AddressRequest body) {
+        UserAddress address = new UserAddress();
+        address.setUser(us);
+        address.setDistrict(body.getDistrict_code());
+        address.setProvince(body.getProvince_code());
+        address.setWard(body.getWard_code());
+        address.setPhone(body.getPhone());
+        address.setDetail(body.getDetail());
+        address.setDeleted(false);
+
+        addressRepo.save(address);
+    }
+
+    @Override
+    public void removeUserAddress(long userId, long addressId) {
+        UserAddress address = addressRepo.findById(addressId).orElseThrow();
+        if (address != null && address.getUser().getUserId() == userId) {
+            address.setDeleted(true);
+            addressRepo.save(address);
+        }
     }
 }

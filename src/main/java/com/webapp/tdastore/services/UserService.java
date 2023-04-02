@@ -3,7 +3,11 @@ package com.webapp.tdastore.services;
 import com.webapp.tdastore.data.dto.UserDTO;
 import com.webapp.tdastore.data.entities.ResetPassToken;
 import com.webapp.tdastore.data.entities.User;
+import com.webapp.tdastore.data.entities.UserAddress;
 import com.webapp.tdastore.data.entities.VerificationToken;
+import com.webapp.tdastore.data.payload.AddressRequest;
+import com.webapp.tdastore.data.payload.ProfileInfo;
+import com.webapp.tdastore.data.payload.response.ChangePassword;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -12,6 +16,12 @@ public interface UserService {
     User findById(long id);
 
     User findByEmail(String email);
+
+    List<UserAddress> getAddressesByUser(long userId);
+
+    void addNewUserAddress(User us, AddressRequest body);
+
+    void removeUserAddress(long userId, long addressId);
 
     List<User> findUserHasRoleUser(Pageable pageable, int noUser);
 
@@ -35,4 +45,8 @@ public interface UserService {
 
 
     void updatePassword(User us, String password);
+
+    void changePassword(long userId, ChangePassword body);
+
+    void changeInfo(long userId, ProfileInfo body);
 }

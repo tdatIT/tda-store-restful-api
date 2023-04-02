@@ -14,7 +14,6 @@ import com.webapp.tdastore.event.OnRegistrationCompleteEvent;
 import com.webapp.tdastore.security.CustomUserDetails;
 import com.webapp.tdastore.security.JwtTokenProvider;
 import com.webapp.tdastore.services.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -33,8 +32,7 @@ import java.util.Date;
 @RestController
 @RequestMapping(value = "/api/v1/auth")
 public class AuthenticationController {
-    @Autowired
-    private ModelMapper modelMapper;
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -104,7 +102,7 @@ public class AuthenticationController {
         return response;
     }
 
-    @RequestMapping(value = "/reset-password", method = RequestMethod.PUT)
+    @RequestMapping(value = "/reset-password", method = RequestMethod.PATCH)
     public CustomResponse resetPassword(@RequestBody @Valid ResetPass resetPass,
                                         BindingResult bindingResult) {
         if (bindingResult.hasErrors())

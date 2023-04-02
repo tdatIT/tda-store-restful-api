@@ -21,7 +21,6 @@ public class ShippingServiceImpl implements ShippingService {
             default:
                 final_cost = (int) (DEFAULT_COST * OUTSKIRTS);
                 break;
-
         }
         return final_cost;
     }

@@ -1,5 +1,6 @@
 package com.webapp.tdastore.data.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +22,7 @@ public class Role {
     @Column
     private String roleName;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "role")
     private List<User> users;
 }

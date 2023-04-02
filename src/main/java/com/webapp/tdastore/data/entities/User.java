@@ -1,5 +1,6 @@
 package com.webapp.tdastore.data.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -40,18 +41,19 @@ public class User {
     @Column
     private Timestamp updateDate;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserAddress> address;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<ResetPassToken> resetTokens;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Wishlist> wishlists;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
