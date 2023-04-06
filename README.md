@@ -1,7 +1,7 @@
 # tda-store-restful-api
 TDA Web is an e-commerce website built on the REST API architecture used for related TDA e-commerce applications such as mobile and web 
 #Backend for mobile app (Restful API)
- <h4>Tech</h4>
+<h2>Tech</h2>
 <ul> 
   <li>Java 11</li>
   <li>MySQL / PostgreSQL</li>
