@@ -40,6 +40,7 @@ public class ProductDTO {
 
    /* @Min(value = 1000)*/
     private double promotionPrice;
+    private Long viewCount;
 
     private Timestamp createDate;
 

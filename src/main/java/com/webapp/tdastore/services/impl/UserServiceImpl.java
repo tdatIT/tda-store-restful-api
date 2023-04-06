@@ -10,6 +10,7 @@ import com.webapp.tdastore.data.repositories.UserAddressRepo;
 import com.webapp.tdastore.data.repositories.UserRepos;
 import com.webapp.tdastore.data.repositories.VerificationTokenRepos;
 import com.webapp.tdastore.services.EmailService;
+import com.webapp.tdastore.services.UploadImageService;
 import com.webapp.tdastore.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -38,14 +40,15 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ResetPassTokenRepos resetPassTokenRepos;
-
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private UploadImageService uploadImageService;
     @Autowired
     private PasswordEncoder encoder;
 
     @Autowired
     private ModelMapper mapper;
-    @Autowired
-    private EmailService emailService;
 
 
     @Bean
@@ -166,6 +169,17 @@ public class UserServiceImpl implements UserService {
             us.setUpdateDate(new Timestamp(new Date().getTime()));
             userRepos.save(us);
         }
+    }
+
+    @Transactional
+    @Override
+    public void changeAvatar(User us, MultipartFile imageFile) {
+        if (us.getAvatar() != null) {
+            uploadImageService.removeFile(us.getAvatar());
+        }
+        String new_av_url = uploadImageService.uploadFile(imageFile);
+        us.setAvatar(new_av_url);
+        userRepos.save(us);
     }
 
     @Override

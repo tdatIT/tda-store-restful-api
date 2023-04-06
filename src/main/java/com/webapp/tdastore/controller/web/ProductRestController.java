@@ -60,12 +60,37 @@ public class ProductRestController {
         return responseList;
     }
 
+    @RequestMapping(value = "/popular", method = RequestMethod.GET)
+    public List<ProductResponse> getPopularProduct(@RequestParam(defaultValue = "0") Integer page) {
+        List<Product> products = productService.findPopularProduct(page);
+        if (products.size() < 1)
+            throw new CustomExceptionRuntime(404, "Empty product");
+        List<ProductResponse> responseList = products
+                .stream().map(item ->
+                        productService.mappingProductToResponseObject(item)
+                ).collect(Collectors.toList());
+        return responseList;
+    }
+
+    @RequestMapping(value = "/best-seller", method = RequestMethod.GET)
+    public List<ProductResponse> getBestSellerProduct(@RequestParam(defaultValue = "0") Integer page) {
+        List<Product> products = productService.findBestSeller(page);
+        if (products.size() < 1)
+            throw new CustomExceptionRuntime(404, "Empty product");
+        List<ProductResponse> responseList = products
+                .stream().map(item ->
+                        productService.mappingProductToResponseObject(item)
+                ).collect(Collectors.toList());
+        return responseList;
+    }
+
     @RequestMapping(value = "/{code}", method = RequestMethod.GET)
     public ProductResponse getProductByCode(@PathVariable String code) {
         Product p = productService.findProductByCode(code);
         if (p == null) {
             throw new CustomExceptionRuntime(404, "Not found product have this code");
         } else {
+            productService.increaseViewCount(p);
             ProductResponse response = productService.mappingProductToResponseObject(p);
             return response;
         }

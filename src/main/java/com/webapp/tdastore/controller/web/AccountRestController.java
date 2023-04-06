@@ -1,5 +1,6 @@
 package com.webapp.tdastore.controller.web;
 
+import com.webapp.tdastore.config.ValidatorUtils;
 import com.webapp.tdastore.data.entities.User;
 import com.webapp.tdastore.data.entities.UserAddress;
 import com.webapp.tdastore.data.exception.CustomExceptionRuntime;
@@ -18,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -67,6 +69,17 @@ public class AccountRestController {
             throw new CustomExceptionRuntime(400, "Request was failed. Validate data again");
         userService.changeInfo(getUserFromAuthentication().getUserId(), body);
         return ResponseEntity.ok("Change info was successful");
+    }
+
+    @RequestMapping(value = "/change-avatar", method = RequestMethod.PATCH)
+    public ResponseEntity changeAvatarUser(@RequestParam MultipartFile image_file) {
+        if (!ValidatorUtils.validateMineFile(image_file))
+            throw new CustomExceptionRuntime(400, "Request failed. This file must be png, jpg, jpeg." +
+                    " Please validate file again");
+        User us = getUserFromAuthentication();
+        userService.changeAvatar(us, image_file);
+        return ResponseEntity.ok("Change avatar was successful");
+
     }
 
     @RequestMapping(value = "/addresses", method = RequestMethod.GET)

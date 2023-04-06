@@ -48,18 +48,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findHotProduct(int page, int number) {
-        return productRepos.findAllByOrderByCreateDateDesc(PageRequest.of(page, number));
+    public List<Product> findPopularProduct(int page) {
+        return productRepos.findPopularProduct(PageRequest.of(page, 6));
     }
 
     @Override
-    public List<Product> findHotTrend(int page, int number) {
-        return productRepos.findAllByOrderByCreateDateDesc(PageRequest.of(page, number));
-    }
-
-    @Override
-    public List<Product> listProductByCode(String code) {
-        return productRepos.findByProductCode(code);
+    public List<Product> findBestSeller(int page) {
+        return productRepos.findBestSellingProducts(PageRequest.of(page, 6));
     }
 
     @Override
@@ -68,17 +63,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findQuery(Long categoryId, Integer status, int page, int number) {
-        return productRepos.findProductByQuery(
-                categoryId,
-                status,
-                PageRequest.of(page, number)
-        ).getContent();
-    }
-
-    @Override
-    public List<Product> findByKeyword(String keyword) {
-        return productRepos.findByKeyword(keyword);
+    public List<Product> findByKeyword(String keyword, Integer page) {
+        int size_product = 10;
+        return productRepos.findByKeyword(keyword, PageRequest.of(page, size_product));
     }
 
     @Override
@@ -91,11 +78,20 @@ public class ProductServiceImpl implements ProductService {
         return productRepos.count();
     }
 
+    @Transactional
+    @Override
+    public void increaseViewCount(Product product) {
+        long count = product.getViewCount() + 1;
+        product.setViewCount(count);
+        productRepos.save(product);
+    }
+
     @Override
     @Transactional
     public String insert(Product product) {
         product.setCreateDate(new Timestamp(new Date().getTime()));
         Product p = productRepos.save(product);
+        p.setViewCount(0L);
         //Generate product code
         p.setProductCode(generatorCode.generator(p.getProductId() + ""));
         productRepos.save(p);

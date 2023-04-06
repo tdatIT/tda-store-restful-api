@@ -20,10 +20,12 @@ public class ProductResponse {
     private int status;
     private double price;
     private double promotionPrice;
+    private long categoryId;
     private Timestamp createDate;
     private Timestamp updateDate;
     private boolean isDeleted;
-    private long categoryId;
+    private Long viewCount;
+
     private List<ProductType> productType;
     private List<String> images_file;
 

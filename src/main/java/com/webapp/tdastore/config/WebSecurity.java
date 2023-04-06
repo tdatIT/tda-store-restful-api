@@ -53,16 +53,18 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .disable();
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-
-                .antMatchers("/api/v1/auth/**",
+                .antMatchers("/",
+                        "/api/v1/auth/**",
                         "/verify-account/**",
                         "/api/v1/products/**",
                         "/api/v1/categories/**",
                         "/api/v1/shipping-cost-calculator/**",
                         "/swagger-ui/**",
                         "/v3/api-docs/**").permitAll()
-                .anyRequest().authenticated();
-
+                .antMatchers("/api/v1/users/**",
+                        "/api/v1/orders/**",
+                        "/api/v1/cart/**",
+                        "/api/v1/wishlists/**").authenticated();
         http.addFilterBefore(getJwtAuthFilter(),
                 UsernamePasswordAuthenticationFilter.class);
     }

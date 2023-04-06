@@ -9,6 +9,7 @@ import com.webapp.tdastore.data.payload.AddressRequest;
 import com.webapp.tdastore.data.payload.ProfileInfo;
 import com.webapp.tdastore.data.payload.response.ChangePassword;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -49,4 +50,6 @@ public interface UserService {
     void changePassword(long userId, ChangePassword body);
 
     void changeInfo(long userId, ProfileInfo body);
+
+    void changeAvatar(User us, MultipartFile imageFile);
 }

@@ -10,18 +10,13 @@ public interface ProductService {
 
     List<Product> findNewProduct(int page, int number);
 
-    List<Product> findHotProduct(int page, int number);
+    List<Product> findPopularProduct(int page);
 
-    List<Product> findHotTrend(int page, int number);
-
-
-    List<Product> findQuery(Long categoryId, Integer status, int page, int number);
-
-    List<Product> listProductByCode(String code);
+    List<Product> findBestSeller(int page);
 
     Product findProductByCode(String code);
 
-    List<Product> findByKeyword(String keyword);
+    List<Product> findByKeyword(String keyword, Integer page);
 
     Product findById(long id);
 
@@ -30,6 +25,8 @@ public interface ProductService {
     String insert(Product product);
 
     void update(Product product);
+
+    void increaseViewCount(Product product);
 
     void disableProduct(Product product);
 

@@ -18,6 +18,8 @@ public class Product {
     private long productId;
 
     @Column
+    private Long viewCount;
+    @Column
     private String productCode;
 
     @Column
