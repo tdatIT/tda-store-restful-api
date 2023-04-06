@@ -5,6 +5,7 @@ TDA Web is an e-commerce website built on the REST API architecture used for rel
 <ul> 
   <li>Java 11</li>
   <li>MySQL / PostgreSQL</li>
+  <li>Spring Boot</li>
   <li>Spring Web</li>
   <li>Spring Security</li>
   <li>Spring Data</li>
