@@ -31,7 +31,8 @@ public class Order {
 
     @Column
     private int paymentMethod;
-
+    @Column
+    private String commitStatus;
     @Column
     private Timestamp createDate;
 
@@ -64,5 +65,6 @@ public class Order {
     public static final int COMPLETE_STATUS = 3;
     public static final int CANCEL_STATUS = 4;
     public static final int CHECK_STATUS = 0;
+    public static final int FAILED_ORDER = -1;
 
 }

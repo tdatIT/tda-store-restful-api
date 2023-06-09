@@ -76,18 +76,43 @@ public class OrderServiceImpl implements OrderService {
     public void insertOrderForUser(OrderDTO dto) {
         //find item in cart from user request
         try {
-            List<ItemShoppingCart> items = new LinkedList<>();
-            for (Long _id : dto.getCart_items()) {
-                ItemShoppingCart item = dbCart.findItemById(_id);
-                if (item != null)
-                    items.add(item);
+            List<ItemShoppingCart> items = getItemByIdList(dto.getCart_items());
+            Order order = processDtoToOrder(dto, items);
+            order.setCreateDate(new Timestamp(new Date().getTime()));
+            //set status for order
+            order.setOrderStatus(Order.CHECK_STATUS);
+            order.setCommitStatus("order was created successful");
+            //verify order with inventory
+            for (ItemShoppingCart i : items) {
+                if (i.getProduct().getQuantity() < i.getQuantity()) {
+                    order.setOrderStatus(Order.FAILED_ORDER);
+                    order.setCommitStatus("out of stock");
+                    break;
+                }
             }
+            //insert new order into db
+            orderRepos.save(order);
+            //remove item was created orders from user shopping cart
+            if (order.getOrderStatus() == Order.CHECK_STATUS) {
+                items.forEach(t -> {
+                    dbCart.removeItemWhenOrderItemWasCreated(t.getItemId());
+                    Product p = t.getProduct();
+                    int new_quantity = p.getQuantity() - t.getQuantity();
+                    p.setQuantity(new_quantity);
+                    productRepos.save(p);
+                });
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    public Order processDtoToOrder(OrderDTO dto, List<ItemShoppingCart> items) {
+        Order order = modelMapper.map(dto, Order.class);
+        try {
             //find user has exist in db
-            Order order = modelMapper.map(dto, Order.class);
             order.setUser(new User(dto.getUserId()));
             order.setAddress(new UserAddress(dto.getAddress_id()));
-            order.setCreateDate(new Timestamp(new Date().getTime()));
-            order.setOrderStatus(Order.CHECK_STATUS);
             //set shipping cost
             UserAddress address = addressRepo.findById(dto.getAddress_id()).orElseThrow();
             order.setShippingCosts(
@@ -114,25 +139,25 @@ public class OrderServiceImpl implements OrderService {
                     order.setDiscount(order.getDiscount() - (order.getDiscount() * v.getDiscount()));
                 }
             }
-            //insert new order into db
-            orderRepos.save(order);
-            //remove item was created orders from user shopping cart
-            items.forEach(t -> {
-                dbCart.removeItemWhenOrderItemWasCreated(t.getItemId());
-                Product p = t.getProduct();
-                int new_quantity = p.getQuantity() - t.getQuantity();
-                p.setQuantity(new_quantity);
-                productRepos.save(p);
-            });
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+        return order;
+    }
+
+    public List<ItemShoppingCart> getItemByIdList(List<Long> list_id) {
+        List<ItemShoppingCart> items = new LinkedList<>();
+        for (Long _id : list_id) {
+            ItemShoppingCart item = dbCart.findItemById(_id);
+            if (item != null && item.getProduct().getQuantity() >= item.getQuantity())
+                items.add(item);
+        }
+        return items;
     }
 
     @Override
     public boolean validationOrder(OrderDTO dto) {
         //find item in cart from user request
-        List<ItemShoppingCart> items = new LinkedList<>();
         for (Long _id : dto.getCart_items()) {
             ItemShoppingCart item = dbCart.findItemById(_id);
             if (item != null && item.getProduct().getQuantity() <= 0)

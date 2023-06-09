@@ -13,9 +13,9 @@ public class MQConsumer {
     @Autowired
     private OrderService orderService;
 
- @RabbitListener(queues = MQConfig.QUEUE)
+    @RabbitListener(queues = MQConfig.QUEUE)
     public void consumerMessageFromQueue(OrderDTO order) {
-     orderService.insertOrderForUser(order);
-     log.info("create order from mq success:" + order);
- }
+        orderService.insertOrderForUser(order);
+        log.info("create order from mq success:" + order);
+    }
 }

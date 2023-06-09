@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.stream.Collectors;
 
 @RestController
@@ -60,12 +61,11 @@ public class OrderRestController {
         return orderService.mapOrderEntityToResponse(order);
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity createOrderFromUserRequest(@Valid @RequestBody OrderDTO dto,
                                                      BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             throw new CustomExceptionRuntime(400, "The request failed. Please check the input data again.");
-
         //set user into order
         dto.setUserId(getUserFromAuthentication().getUserId());
         if (orderService.validationOrder(dto)) {
