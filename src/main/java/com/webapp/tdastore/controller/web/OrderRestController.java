@@ -1,5 +1,6 @@
 package com.webapp.tdastore.controller.web;
 
+import com.webapp.tdastore.config.MQConfig;
 import com.webapp.tdastore.data.dto.OrderDTO;
 import com.webapp.tdastore.data.entities.Order;
 import com.webapp.tdastore.data.entities.User;
@@ -8,6 +9,7 @@ import com.webapp.tdastore.data.payload.response.OrderResponse;
 import com.webapp.tdastore.security.CustomUserDetails;
 import com.webapp.tdastore.services.OrderService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,6 +27,8 @@ import java.util.stream.Collectors;
 public class OrderRestController {
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     private User getUserFromAuthentication() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -61,13 +65,16 @@ public class OrderRestController {
                                                      BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             throw new CustomExceptionRuntime(400, "The request failed. Please check the input data again.");
+
         //set user into order
         dto.setUserId(getUserFromAuthentication().getUserId());
-        //create new order
-        long orderId = orderService.insertOrderForUser(dto);
-        if (orderId == 0)
-            throw new CustomExceptionRuntime(400, "Failed to create the order. " +
-                    "Please verify the input data and try again");
-        return ResponseEntity.ok("The order was created successful with ID: " + orderId);
+        if (orderService.validationOrder(dto)) {
+            //create new order
+            rabbitTemplate.convertAndSend(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY, dto);
+            //orderService.insertOrderForUser(dto);
+            return ResponseEntity.ok("The order was created successful");
+        } else {
+            throw new CustomExceptionRuntime(400, "Sorry, the product you ordered is currently out of stock.");
+        }
     }
 }

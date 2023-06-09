@@ -9,17 +9,16 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class OrderItems {
-    @EmbeddedId
-    private OrderItemKey id = new OrderItemKey();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long itemOId;
 
     @ManyToOne
-    @MapsId("productId")
     @JoinColumn(name = "product_id")
     private Product product;
 
 
     @ManyToOne
-    @MapsId("orderId")
     @JoinColumn(name = "order_id")
     private Order order;
 

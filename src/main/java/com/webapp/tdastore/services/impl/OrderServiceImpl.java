@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +54,7 @@ public class OrderServiceImpl implements OrderService {
         item.setUserId(order.getUser().getUserId());
         item.setOrder_items(order.getItems().stream().map(o -> {
             OrderItemResp i = new OrderItemResp();
+            i.setItemOId(o.getItemOId());
             i.setQuantity(o.getQuantity());
             i.setPrice(o.getPrice());
             i.setProductId(o.getProduct().getProductId());
@@ -71,10 +73,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public long insertOrderForUser(OrderDTO dto) {
+    public void insertOrderForUser(OrderDTO dto) {
         //find item in cart from user request
         try {
-            List<ItemShoppingCart> items = dbCart.findAllByItemsId(dto.getCart_items());
+            List<ItemShoppingCart> items = new LinkedList<>();
+            for (Long _id : dto.getCart_items()) {
+                ItemShoppingCart item = dbCart.findItemById(_id);
+                if (item != null)
+                    items.add(item);
+            }
             //find user has exist in db
             Order order = modelMapper.map(dto, Order.class);
             order.setUser(new User(dto.getUserId()));
@@ -108,15 +115,30 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
             //insert new order into db
-            Order success = orderRepos.save(order);
+            orderRepos.save(order);
             //remove item was created orders from user shopping cart
-            items.forEach(t -> dbCart.removeItemWhenOrderItemWasCreated(t.getItemId()));
-            //return orderId
-            return success.getOrderId();
+            items.forEach(t -> {
+                dbCart.removeItemWhenOrderItemWasCreated(t.getItemId());
+                Product p = t.getProduct();
+                int new_quantity = p.getQuantity() - t.getQuantity();
+                p.setQuantity(new_quantity);
+                productRepos.save(p);
+            });
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        return 0;
+    }
+
+    @Override
+    public boolean validationOrder(OrderDTO dto) {
+        //find item in cart from user request
+        List<ItemShoppingCart> items = new LinkedList<>();
+        for (Long _id : dto.getCart_items()) {
+            ItemShoppingCart item = dbCart.findItemById(_id);
+            if (item != null && item.getProduct().getQuantity() <= 0)
+                return false;
+        }
+        return true;
     }
 
     @Transactional

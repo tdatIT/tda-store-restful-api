@@ -9,6 +9,8 @@ public interface ItemShoppingCartService {
 
     List<ItemShoppingCart> findAllByItemsId(List<Long> itemId);
 
+    ItemShoppingCart findItemById(long itemId);
+
     double totalAmountSelectItem(List<ItemShoppingCart> items);
 
     double totalHaveDiscountSelectItem(List<ItemShoppingCart> items);

@@ -9,11 +9,13 @@ import com.webapp.tdastore.data.payload.LoginRequest;
 import com.webapp.tdastore.data.payload.ResetPass;
 import com.webapp.tdastore.data.payload.response.CustomResponse;
 import com.webapp.tdastore.data.payload.response.LoginResponse;
+import com.webapp.tdastore.data.payload.response.UserResponse;
 import com.webapp.tdastore.data.repositories.ResetPassTokenRepos;
 import com.webapp.tdastore.event.OnRegistrationCompleteEvent;
 import com.webapp.tdastore.security.CustomUserDetails;
 import com.webapp.tdastore.security.JwtTokenProvider;
 import com.webapp.tdastore.services.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -41,6 +43,8 @@ public class AuthenticationController {
     private JwtTokenProvider tokenProvider;
     @Autowired
     private ResetPassTokenRepos resetPassTokenRepos;
+    @Autowired
+    private ModelMapper modelMapper;
     @Value("${api.app.jwtExpiration}")
     private Long expiration;
     @Autowired
@@ -49,15 +53,18 @@ public class AuthenticationController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public LoginResponse login(@Valid @RequestBody LoginRequest loginData) {
         User us = userService.findByEmail(loginData.getEmail());
+        UserResponse us_resp = modelMapper.map(us, UserResponse.class);
         if (us == null || us.isStatus() == false) {
             throw new CustomExceptionRuntime(401, "User hasn't been active or not register");
         }
         try {
-            Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginData.getEmail(), loginData.getPassword()));
+            Authentication authentication = authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginData.getEmail(), loginData.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             //return jwt
             String jwt = tokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
-            return new LoginResponse(200, "Login to success", jwt, new Date(new Date().getTime() + expiration));
+            return new LoginResponse(200, "Login to success", jwt,
+                    new Date(new Date().getTime() + expiration),us_resp);
         } catch (BadCredentialsException exception) {
             throw new CustomExceptionRuntime(401, "Invalid username or password");
         }

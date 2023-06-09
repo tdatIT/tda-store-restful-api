@@ -9,9 +9,11 @@ import java.util.List;
 public interface OrderService {
     List<Order> lastOrderRecentOfUser(long userId, int page, int size);
 
+    boolean validationOrder(OrderDTO dto);
+
     Order getOrderByOrderId(long orderId);
 
-    long insertOrderForUser(OrderDTO dto);
+    void insertOrderForUser(OrderDTO dto);
 
     void updateOrder(Order order);
 

@@ -1,14 +1,19 @@
 package com.webapp.tdastore.data.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class OrderDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderDTO implements Serializable {
 
     @Positive
     private long userId;

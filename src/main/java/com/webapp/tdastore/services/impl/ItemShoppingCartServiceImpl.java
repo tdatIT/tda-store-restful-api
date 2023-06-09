@@ -30,6 +30,11 @@ public class ItemShoppingCartServiceImpl implements ItemShoppingCartService {
     }
 
     @Override
+    public ItemShoppingCart findItemById(long itemId) {
+        return cartRepos.findById(itemId).orElseThrow();
+    }
+
+    @Override
     public List<ItemShoppingCart> findAllByItemsId(List<Long> itemId) {
         return itemId.stream().map(t ->
                 cartRepos.findById(t).orElseThrow()

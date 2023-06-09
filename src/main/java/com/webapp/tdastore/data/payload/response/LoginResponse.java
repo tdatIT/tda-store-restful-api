@@ -13,4 +13,6 @@ public class LoginResponse {
     public String jwt;
     public Date expiryDate;
 
+    public UserResponse user;
+
 }
