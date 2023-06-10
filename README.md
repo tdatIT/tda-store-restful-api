@@ -14,4 +14,5 @@ TDA Web is an e-commerce website built on the REST API architecture used for rel
   <li>Cloudinary</li>
   <li>RabbitMQ</li>
 </ul>
+![erd-image](doc/Ferd.png)
 <h4>Development by Tran Tien Dat</h4>
